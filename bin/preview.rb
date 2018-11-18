@@ -6,7 +6,7 @@ require 'shellwords'
 
 COMMAND = %[(highlight -O ansi {} || coderay {} || rougify {} || cat {}) 2> /dev/null]
 ANSI    = /\x1b\[[0-9;]*m/
-REVERSE = "\x1b[7m"
+EMPHASIZE = "\x1b[4m"
 RESET   = "\x1b[m"
 
 split = ARGV.delete('-v')
@@ -45,7 +45,7 @@ offset = [1, center - height / 3].max
 IO.popen(['sh', '-c', COMMAND.gsub('{}', Shellwords.shellescape(path))]) do |io|
   io.each_line.drop(offset - 1).take(height).each_with_index do |line, lno|
     if lno + offset == center
-      puts REVERSE + line.chomp.gsub(ANSI) { |m| m + REVERSE } + RESET
+      puts EMPHASIZE + line.chomp.gsub(ANSI) { |m| m + EMPHASIZE } + RESET
     else
       puts line
     end
